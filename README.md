@@ -1,4 +1,5 @@
-# PhysGaussian: Physics-Integrated 3D Gaussians for Generative Dynamics
+# AHMGaussian: Automatic Hybrid-Material Simulation with Gaussians
+
 ## My Update
 ### preprocess.py
 
