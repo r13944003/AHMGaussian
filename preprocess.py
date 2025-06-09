@@ -73,6 +73,76 @@ material_name_to_index = {
     "liquid": 8
 }
 
+material_list = {
+    "sand":{
+        "material":"sand",
+        "E": 5e7,
+        "nu": 0.3,
+        "density":2000, 
+        "friction_angle": 20,
+        "softening": 0.1,
+        "cohesion": 0.0
+    },
+    "soil":{
+        "material":"sand",
+        "E": 5e7,
+        "nu": 0.3,
+        "density":2000, 
+        "friction_angle": 50,
+        "softening": 0.1,
+        "cohesion": 0.0001 
+    },
+    "metal":{
+        "material": "metal",
+        "E": 1e8,
+        "nu": 0.3,
+        "density": 1000,
+        "yield_stress": 1e5,
+        "hardening": 1,
+        "xi": 0.01  
+    },
+    "jelly":{
+        "material": "jelly",
+        "E": 2e3,
+        "nu": 0.3,
+        "density": 20
+    },
+    "plush":{
+        "material": "jelly",
+        "E": 1e4,
+        "nu": 0.3,
+        "density": 100
+    },
+    "wood":{
+        "material": "jelly",
+        "E": 1e6,
+        "nu": 0.3,
+        "density": 500
+    },
+    "plastic":{
+        "material": "jelly",
+        "E": 1e9,
+        "nu": 0.3,
+        "density": 300
+    },
+    "paste":{
+        "material": "foam",
+        "E": 5e5,
+        "nu": 0.3,
+        "density": 1000,
+        "yield_stress": 1e5,
+        "plastic_viscosity": 10
+    },
+    "liquid":{
+        "material": "water",
+        "E": 1e4,
+        "nu": 0.45,
+        "density": 1000,
+        "yield_stress": 1e2,
+        "plastic_viscosity": 0.01
+    }
+}
+
 def show_3d_points_with_colors(points, colors, target_idx=1000):
     """
     points: (N, 3) torch.Tensor
@@ -310,6 +380,12 @@ def save_gaussians_with_saveply(
         ply_path = os.path.join(output_dir, f"{label}.ply")
         g_sub.save_ply(ply_path)           # 若 fork 過，可加 as_binary=True
 
+        # === 儲存 material 的單一參數 json ===
+        material_param = material_list[label]
+        parameter_path = os.path.join(output_dir, f"{label}_parameter.json")
+        with open(parameter_path, "w") as f:
+            json.dump(material_param, f, indent=2)
+
         # 物理參數 json
         phys_subset = {}
         for k in phys_dict:
@@ -436,7 +512,7 @@ if __name__ == "__main__":
     # show_3d_points_with_colors(project_pos, final_colors)
 
     # 對應每個 Gaussian 的類別名稱
-    labels = [color_to_label.get(tuple(c), "plant") for c in final_colors]
+    labels = [color_to_material.get(tuple(c), "plant") for c in final_colors]
 
     # 分類
     label_to_indices = {k: [] for k in set(labels)}
