@@ -46,31 +46,31 @@ from collections import defaultdict
 import open3d as o3d
 
 color_to_material = {
-    (255, 255, 255): "wood",
-    (14, 106, 71): "jelly",
-    (188, 20, 102): "metal",
-    (121, 210, 214): "soil",
-    (102, 179, 92): "jelly"
+    (255, 255, 255): "sand", # "background"
+    (14, 106, 71): "sand", # "plant"
+    (188, 20, 102): "jelly", # "pot"
+    (121, 210, 214): "jelly", # "water"
+    (102, 179, 92): "sand"# # "artifact"
 }
-
-color_to_label = {
-    (255, 255, 255): "background",
-    (14, 106, 71): "plant",
-    (188, 20, 102): "pot",
-    (121, 210, 214): "water",
-    (102, 179, 92): "artifact"
-}
-
+# material_name_to_index = {
+#     "sand": 0,
+#     "soil": 1,
+#     "metal": 2,
+#     "jelly": 3,
+#     "plush": 4,
+#     "wood": 5,
+#     "plastic": 6,
+#     "paste": 7,
+#     "liquid": 8
+# }
 material_name_to_index = {
-    "sand": 0,
-    "soil": 1,
-    "metal": 2,
-    "jelly": 3,
-    "plush": 4,
-    "wood": 5,
-    "plastic": 6,
-    "paste": 7,
-    "liquid": 8
+    "jelly": 0,
+    "metal": 1,
+    "sand": 2,
+    "foam": 3,
+    "snow": 4,
+    "plasticine": 5,
+    "water": 6,
 }
 
 material_list = {

@@ -53,10 +53,10 @@ ti.init(arch=ti.cuda, device_memory_GB=8.0)
 material_list = {
     "sand":{
         "material":"sand",
-        "E": 5e7,
+        "E": 2e7,
         "nu": 0.3,
         "density":2000, 
-        "friction_angle": 20,
+        "friction_angle": 5,
         "softening": 0.1,
         "cohesion": 0.0
     },
@@ -80,9 +80,9 @@ material_list = {
     },
     "jelly":{
         "material": "jelly",
-        "E": 6e3,
-        "nu": 0.3,
-        "density": 200
+        "E": 2e6,
+        "nu": 0.4,
+        "density": 70
     },
     "plush":{
         "material": "jelly",
@@ -120,16 +120,37 @@ material_list = {
     }
 }
 
+# material_index_to_name = {
+#     0: "sand",
+#     1: "jelly",
+#     2: "jelly",
+#     3: "sand",
+#     4: "plush",
+#     5: "jelly",
+#     6: "plastic",
+#     7: "paste",
+#     8: "liquid"
+# }
+# material_index_to_name = {
+#     0: "sand",
+#     1: "soil",
+#     2: "metal",
+#     3: "jelly",
+#     4: "plush",
+#     5: "wood",
+#     6: "plastic",
+#     7: "paste",
+#     8: "liquid"
+# }
+
 material_index_to_name = {
-    0: "sand",
-    1: "soil",
-    2: "metal",
-    3: "jelly",
-    4: "plush",
-    5: "wood",
-    6: "plastic",
-    7: "paste",
-    8: "liquid"
+    0: "jelly",
+    1: "metal",
+    2: "sand",
+    3: "foam",
+    4: "snow",
+    5: "plastic",
+    6: "water",
 }
 
 def compare_tensors(name, t1, t2, atol=1e-6):
@@ -156,6 +177,7 @@ def get_per_particle_material_dict(material_tensor):
 
     for i, name in enumerate(material_names):
         mat_dict = material_list[name]
+        # print(f"Material {i}: {name}, properties: {mat_dict}")
         for k in all_keys:
             if k in mat_dict:
                 field_dict[k][i] = mat_dict[k]  # 有則寫入，無則保留 0
@@ -395,10 +417,12 @@ if __name__ == "__main__":
         k=3
     )
 
+    # show_3d_points(mpm_init_pos)
     n_particles = mpm_init_pos.shape[0]
     for key, val in material_params["per_particle_material"].items():
-        assert val.shape[0] == n_particles, f"After filling [❌] {key} length mismatch: {val.shape[0]} vs {n_particles}"
-    print(f"[✅] All material parameters match {n_particles} particles.")
+        assert val.shape[0] == n_particles, f"After filling {key} length mismatch: {val.shape[0]} vs {n_particles}"
+    print(f"All material parameters match {n_particles} particles.")
+    # print("Material parameters:", material_params["per_particle_material"])
     
     
     mpm_solver.set_parameters_dict(material_params)
